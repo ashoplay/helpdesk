@@ -3,9 +3,11 @@
 # Update system packages
 sudo apt update && sudo apt upgrade -y
 
-# Install Node.js and npm
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+# Install Node.js and npm (updated to v18)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt install -y nodejs git
+# Check node version
+node --version
 
 # Install Nginx
 sudo apt install -y nginx
@@ -42,13 +44,16 @@ mkdir -p /var/www/helpdesk-frontend
 cd /var/www/helpdesk-frontend
 git clone https://github.com/yourusername/helpdesk.git .
 
+# Set proper ownership of the application directory
+sudo chown -R $(whoami):$(whoami) /var/www/helpdesk-frontend
+
 # Install dependencies
 cd client
 npm install
 
 # Create .env file for production build
 cat > .env.production << EOL
-REACT_APP_API_URL=https://support.YOUR-ALIAS.ikt-fag.no/api
+REACT_APP_API_URL=https://support.civet.ikt-fag.no/api
 EOL
 
 # Build the React app
