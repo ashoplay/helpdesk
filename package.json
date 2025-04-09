@@ -1,0 +1,56 @@
+{
+  "name": "helpdesk-system",
+  "version": "1.0.0",
+  "description": "A helpdesk ticketing system",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd client && npm install",
+    "build": "cd client && npm run build",
+    "create-admin": "node server/seeder -i",
+    "delete-users": "node server/seeder -d",
+    "seed-tickets": "node server/seedSampleTickets.js",
+    "check-system": "node server/scripts/system-check.js",
+    "seed-demo": "node server/scripts/seed-demo-data.js",
+    "setup": "npm run seed-demo && echo \"Demo data created! Start the server with 'npm run server'\"",
+    "start-all": "concurrently \"npm run server\" \"npm run client\"",
+    "check-server": "node server/scripts/check-server-status.js",
+    "debug-ticket-model": "node server/scripts/debug-ticket-model.js",
+    "inspect-ticket-model": "node server/scripts/inspect-ticket-model.js",
+    "create-admin-only": "node server/scripts/create-admin-only.js",
+    "test-auth": "node server/scripts/test-auth.js",
+    "force-admin": "node server/scripts/force-create-admin.js",
+    "fix-priorities": "node server/scripts/fix-ticket-priorities.js",
+    "vm-check": "node server/scripts/vm-system-check.js",
+    "deploy-prep": "bash deploy.sh",
+    "prod": "NODE_ENV=production node server/server.js"
+  },
+  "keywords": [
+    "helpdesk",
+    "tickets",
+    "support"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.41.1",
+    "axios": "^1.8.4",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22"
+  }
+}
+

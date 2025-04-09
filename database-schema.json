@@ -1,0 +1,253 @@
+{
+  "models": [
+    {
+      "name": "User",
+      "properties": [
+        {
+          "name": "_id",
+          "type": "ObjectId",
+          "primary": true,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "required": true,
+          "minLength": 2,
+          "maxLength": 50
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "required": true,
+          "unique": true,
+          "match": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+        },
+        {
+          "name": "role",
+          "type": "String",
+          "enum": ["bruker", "1. linje", "2. linje", "admin"],
+          "default": "bruker"
+        },
+        {
+          "name": "password",
+          "type": "String",
+          "required": true,
+          "minLength": 6,
+          "select": false
+        },
+        {
+          "name": "company",
+          "type": "ObjectId",
+          "ref": "Company"
+        },
+        {
+          "name": "createdAt",
+          "type": "Date",
+          "default": "Date.now"
+        }
+      ]
+    },
+    {
+      "name": "Ticket",
+      "properties": [
+        {
+          "name": "_id",
+          "type": "ObjectId",
+          "primary": true,
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "String",
+          "required": true,
+          "minLength": 5,
+          "maxLength": 100
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "required": true,
+          "minLength": 10
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "enum": ["Åpen", "Under arbeid", "Løst"],
+          "default": "Åpen"
+        },
+        {
+          "name": "priority",
+          "type": "String",
+          "enum": ["Lav", "Medium", "Høy"],
+          "default": "Medium"
+        },
+        {
+          "name": "category",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "createdBy",
+          "type": "ObjectId",
+          "ref": "User",
+          "required": true
+        },
+        {
+          "name": "createdByName",
+          "type": "String"
+        },
+        {
+          "name": "assignedToRole",
+          "type": "String",
+          "enum": ["1. linje", "2. linje", null],
+          "default": null
+        },
+        {
+          "name": "feedback",
+          "type": "Object",
+          "properties": [
+            {
+              "name": "rating",
+              "type": "Number",
+              "min": 1,
+              "max": 5
+            },
+            {
+              "name": "comment",
+              "type": "String"
+            },
+            {
+              "name": "submittedAt",
+              "type": "Date"
+            }
+          ]
+        },
+        {
+          "name": "company",
+          "type": "ObjectId",
+          "ref": "Company"
+        },
+        {
+          "name": "createdAt",
+          "type": "Date",
+          "default": "Date.now"
+        },
+        {
+          "name": "updatedAt",
+          "type": "Date",
+          "default": "Date.now"
+        }
+      ]
+    },
+    {
+      "name": "Comment",
+      "properties": [
+        {
+          "name": "_id",
+          "type": "ObjectId",
+          "primary": true,
+          "required": true
+        },
+        {
+          "name": "ticket",
+          "type": "ObjectId",
+          "ref": "Ticket",
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "String",
+          "required": true
+        },
+        {
+          "name": "createdBy",
+          "type": "ObjectId",
+          "ref": "User",
+          "required": true
+        },
+        {
+          "name": "createdByName",
+          "type": "String"
+        },
+        {
+          "name": "createdAt",
+          "type": "Date",
+          "default": "Date.now"
+        }
+      ]
+    },
+    {
+      "name": "Company",
+      "properties": [
+        {
+          "name": "_id",
+          "type": "ObjectId",
+          "primary": true,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "required": true,
+          "unique": true
+        },
+        {
+          "name": "contactPerson",
+          "type": "String"
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "match": "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/"
+        },
+        {
+          "name": "phone",
+          "type": "String"
+        },
+        {
+          "name": "createdAt",
+          "type": "Date",
+          "default": "Date.now"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "source": "User",
+      "target": "Ticket",
+      "type": "one-to-many",
+      "sourceProperty": "_id",
+      "targetProperty": "createdBy"
+    },
+    {
+      "source": "User",
+      "target": "Comment",
+      "type": "one-to-many",
+      "sourceProperty": "_id",
+      "targetProperty": "createdBy"
+    },
+    {
+      "source": "Ticket",
+      "target": "Comment",
+      "type": "one-to-many",
+      "sourceProperty": "_id",
+      "targetProperty": "ticket"
+    },
+    {
+      "source": "Company",
+      "target": "User",
+      "type": "one-to-many",
+      "sourceProperty": "_id",
+      "targetProperty": "company"
+    },
+    {
+      "source": "Company",
+      "target": "Ticket",
+      "type": "one-to-many",
+      "sourceProperty": "_id",
+      "targetProperty": "company"
+    }
+  ]
+}
